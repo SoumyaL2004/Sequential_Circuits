@@ -12,35 +12,27 @@ module tb_GraycodeUpDowncounter;
         .dir(dir),
         .gray(gray)
     );
-
+    
     initial begin
         clk = 0;
         forever #5 clk = ~clk;
     end
 
-    function [3:0] gray_to_bin;
-        input [3:0] g;
-        begin
-            gray_to_bin[3] = g[3];
-            gray_to_bin[2] = gray_to_bin[3] ^ g[2];
-            gray_to_bin[1] = gray_to_bin[2] ^ g[1];
-            gray_to_bin[0] = gray_to_bin[1] ^ g[0];
-        end
-    endfunction
-
     initial begin
-        $monitor("Time=%0t | rst=%b | dir=%b | Gray=%b | Bin=%b",
-                 $time, rst, dir, gray, gray_to_bin(gray));
+        $monitor("Time=%0t | rst=%b | dir=%b | Gray=%b", 
+                  $time, rst, dir, gray);
 
         rst = 1; dir = 1;
-        #10 rst = 0;
-        #120;
+        #10;
+        rst = 0;
+        #160;
         dir = 0;
-        #120;
+        #160;
         rst = 1;
-        #10 rst = 0;
+        #10;
+        rst = 0;
         dir = 1;
         #80;
-        $finish;
+        $stop;
     end
 endmodule
